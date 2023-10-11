@@ -10,7 +10,7 @@ def space_down(event):
 def time_out(event):
     return event[0] == "TIME_OUT"
 
-def run_auto(event):
+def a_down(event):
     return event[0] == "INPUT" and event[1].type == SDL_KEYDOWN and event[1].key == SDLK_a
 
 
@@ -67,6 +67,7 @@ class Sleep:
 
     @staticmethod
     def enter(b_: Boy):
+        b_.action = 3
         pass
 
     @staticmethod
@@ -93,6 +94,7 @@ class Autorun:
 
     @staticmethod
     def exit(b_: Boy):
+
         pass
 
     @staticmethod
@@ -102,7 +104,7 @@ class Autorun:
 
     @staticmethod
     def draw(boy_: Boy):
-        boy_.image.clip_composite_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, 0, 'h', boy_.x, boy_.y * 2, 200, 200)
+        boy_.image.clip_composite_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, 0, 'h', boy_.x, boy_.y * 1.4, 200, 200)
         pass
 
 
@@ -111,9 +113,11 @@ class StateMachine:
         self.cur_state = Sleep
         self.boy = b
         self.transitions = {
-            Sleep : {space_down : Idle},
+            Sleep: {a_down: Autorun , space_down : Idle},
+
+
             Idle : {time_out : Sleep},
-            Idle : {run_auto : Autorun},
+
             Autorun : {time_out : Sleep}
         }
 
