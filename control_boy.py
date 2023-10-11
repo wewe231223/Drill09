@@ -20,7 +20,6 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
         else:
-
             boy.handle_event(("INPUT",event))
 
 

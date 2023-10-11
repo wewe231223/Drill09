@@ -1,13 +1,20 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
-from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time
+from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time, SDLK_a
 import math
+import random
 
 def space_down(event):
     return event[0] == "INPUT" and event[1].type == SDL_KEYDOWN and event[1].key == SDLK_SPACE
 
 def time_out(event):
     return event[0] == "TIME_OUT"
+
+def run_auto(event):
+    return event[0] == "INPUT" and event[1].type == SDL_KEYDOWN and event[1].key == SDLK_a
+
+
+
 class Boy:
     def __init__(self):
         self.x, self.y = 400, 90
@@ -17,6 +24,7 @@ class Boy:
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.wait_time = 0
+        self.dx = 0
 
     def update(self):
         self.state_machine.update()
@@ -74,6 +82,29 @@ class Sleep:
         boy_.image.clip_composite_draw(boy_.frame * 100, 300 , 100, 100, math.pi / 2, '', boy_.x - 25, boy_.y - 25, 100, 100)
         pass
 
+class Autorun:
+
+    @staticmethod
+    def enter(b_: Boy):
+        print("Run enter")
+        b_.action = 0
+        b_.dx = random.randint(5,20)
+        pass
+
+    @staticmethod
+    def exit(b_: Boy):
+        pass
+
+    @staticmethod
+    def do(b_: Boy):
+        b_.frame = (b_.frame + 1) % 8
+        b_.x += b_.dx
+
+    @staticmethod
+    def draw(boy_: Boy):
+        boy_.image.clip_composite_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, 0, 'h', boy_.x, boy_.y * 2, 200, 200)
+        pass
+
 
 class StateMachine:
     def __init__(self, b: Boy):
@@ -81,7 +112,9 @@ class StateMachine:
         self.boy = b
         self.transitions = {
             Sleep : {space_down : Idle},
-            Idle : {time_out : Sleep}
+            Idle : {time_out : Sleep},
+            Idle : {run_auto : Autorun},
+            Autorun : {time_out : Sleep}
         }
 
     def handle_event(self, e):
