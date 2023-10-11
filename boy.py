@@ -2,7 +2,7 @@
 
 # 2020182009 김승범 Drill09
 
-from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time, SDLK_a, SDLK_RIGHT, SDLK_LEFT, SDL_KEYUP
+from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time, SDLK_a, SDLK_RIGHT, SDLK_LEFT, SDL_KEYUP , delay
 import math
 import random
 
@@ -99,7 +99,7 @@ class Autorun:
     def enter(b_: Boy):
         print("Run enter")
         b_.action = 1
-        b_.dx = random.randint(5,20)
+        b_.dx = random.randint(20,30)
         b_.dir = 1
         b_.wait_time = get_time()
 
@@ -194,13 +194,11 @@ class StateMachine:
         self.cur_state = Sleep
         self.boy = b
         self.transitions = {
-            Sleep: {space_down : Idle,right_down : Rightrun, left_down : Leftrun },
-
-
+            Sleep: {space_down : Idle},
             Idle : {time_out : Sleep, a_down : Autorun, right_down : Rightrun, left_down : Leftrun},
             Rightrun : {right_up : Idle},
             Leftrun : {left_up : Idle},
-            Autorun : {time_out : Idle}
+            Autorun : {time_out : Idle, right_down : Rightrun, left_down : Leftrun}
         }
 
     def handle_event(self, e):
@@ -217,3 +215,4 @@ class StateMachine:
 
     def draw(self):
         self.cur_state.draw(self.boy)
+        delay(0.028)
