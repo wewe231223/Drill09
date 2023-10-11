@@ -25,6 +25,7 @@ class Boy:
         self.state_machine.start()
         self.wait_time = 0
         self.dx = 0
+        self.dir = 0
 
     def update(self):
         self.state_machine.update()
@@ -90,6 +91,7 @@ class Autorun:
         print("Run enter")
         b_.action = 0
         b_.dx = random.randint(5,20)
+        b_.dir = 1
         pass
 
     @staticmethod
@@ -100,7 +102,15 @@ class Autorun:
     @staticmethod
     def do(b_: Boy):
         b_.frame = (b_.frame + 1) % 8
-        b_.x += b_.dx
+
+        if b_.x >= 800:
+            b_.action = 1
+            b_.dir = -1
+        elif b_.x <= 0:
+            b_.action = 0
+            b_.dir = 1
+
+        b_.x += b_.dx * b_.dir
 
     @staticmethod
     def draw(boy_: Boy):
