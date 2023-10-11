@@ -156,7 +156,7 @@ class Leftrun:
 
     @staticmethod
     def draw(boy_: Boy):
-        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y * 1.4, 200, 200)
+        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y * 1.4, 100, 100)
         pass
 class Rightrun:
 
@@ -183,7 +183,7 @@ class Rightrun:
 
     @staticmethod
     def draw(boy_: Boy):
-        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y * 1.4, 200, 200)
+        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y * 1.4, 100, 100)
         pass
 
 
@@ -192,7 +192,7 @@ class StateMachine:
         self.cur_state = Sleep
         self.boy = b
         self.transitions = {
-            Sleep: {space_down : Idle},
+            Sleep: {space_down : Idle,right_down : Rightrun, left_down : Leftrun },
 
 
             Idle : {time_out : Sleep, a_down : Autorun, right_down : Rightrun, left_down : Leftrun},
