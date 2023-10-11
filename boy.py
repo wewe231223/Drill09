@@ -1,5 +1,6 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
+
 # 2020182009 김승범 Drill09
 
 from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time, SDLK_a, SDLK_RIGHT, SDLK_LEFT, SDL_KEYUP , delay
