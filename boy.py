@@ -14,7 +14,6 @@ def a_down(event):
     return event[0] == "INPUT" and event[1].type == SDL_KEYDOWN and event[1].key == SDLK_a
 
 
-
 class Boy:
     def __init__(self):
         self.x, self.y = 400, 90
@@ -130,7 +129,7 @@ class StateMachine:
         self.cur_state = Sleep
         self.boy = b
         self.transitions = {
-            Sleep: {a_down: Autorun , space_down : Idle},
+            Sleep: {space_down : Idle},
 
 
             Idle : {time_out : Sleep, a_down : Autorun},
