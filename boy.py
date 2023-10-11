@@ -1,5 +1,5 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
-
+# 2020182009 김승범 Drill09
 from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time, SDLK_a, SDLK_RIGHT, SDLK_LEFT, SDL_KEYUP
 import math
 import random
@@ -156,7 +156,7 @@ class Leftrun:
 
     @staticmethod
     def draw(boy_: Boy):
-        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y * 1.4, 100, 100)
+        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y , 100, 100)
         pass
 class Rightrun:
 
@@ -183,7 +183,7 @@ class Rightrun:
 
     @staticmethod
     def draw(boy_: Boy):
-        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y * 1.4, 100, 100)
+        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y, 100, 100)
         pass
 
 
