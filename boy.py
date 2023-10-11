@@ -92,6 +92,8 @@ class Autorun:
         b_.action = 0
         b_.dx = random.randint(5,20)
         b_.dir = 1
+        b_.wait_time = get_time()
+
         pass
 
     @staticmethod
@@ -101,6 +103,11 @@ class Autorun:
 
     @staticmethod
     def do(b_: Boy):
+
+        if get_time() - b_.wait_time > 5:
+            b_.state_machine.handle_event(("TIME_OUT",0))
+
+
         b_.frame = (b_.frame + 1) % 8
 
         if b_.x >= 800:
@@ -126,9 +133,9 @@ class StateMachine:
             Sleep: {a_down: Autorun , space_down : Idle},
 
 
-            Idle : {time_out : Sleep},
+            Idle : {time_out : Sleep, a_down : Autorun},
 
-            Autorun : {time_out : Sleep}
+            Autorun : {time_out : Idle}
         }
 
     def handle_event(self, e):
