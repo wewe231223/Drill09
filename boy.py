@@ -1,6 +1,6 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
-from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time, SDLK_a
+from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time, SDLK_a, SDLK_RIGHT, SDLK_LEFT, SDL_KEYUP
 import math
 import random
 
@@ -13,6 +13,14 @@ def time_out(event):
 def a_down(event):
     return event[0] == "INPUT" and event[1].type == SDL_KEYDOWN and event[1].key == SDLK_a
 
+def right_down(event):
+    return event[0] == "INPUT" and event[1].type == SDL_KEYDOWN and event[1].key == SDLK_RIGHT
+def left_down(event):
+    return event[0] == "INPUT" and event[1].type == SDL_KEYDOWN and event[1].key == SDLK_LEFT
+def right_up(event):
+    return event[0] == "INPUT" and event[1].type == SDL_KEYUP and event[1].key == SDLK_RIGHT
+def left_up(event):
+    return event[0] == "INPUT" and event[1].type == SDL_KEYUP and event[1].key == SDLK_LEFT
 
 class Boy:
     def __init__(self):
@@ -88,7 +96,7 @@ class Autorun:
     @staticmethod
     def enter(b_: Boy):
         print("Run enter")
-        b_.action = 0
+        b_.action = 1
         b_.dx = random.randint(5,20)
         b_.dir = 1
         b_.wait_time = get_time()
@@ -110,17 +118,72 @@ class Autorun:
         b_.frame = (b_.frame + 1) % 8
 
         if b_.x >= 800:
-            b_.action = 1
+            b_.action = 0
             b_.dir = -1
         elif b_.x <= 0:
-            b_.action = 0
+            b_.action = 1
             b_.dir = 1
 
         b_.x += b_.dx * b_.dir
 
     @staticmethod
     def draw(boy_: Boy):
-        boy_.image.clip_composite_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, 0, 'h', boy_.x, boy_.y * 1.4, 200, 200)
+        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y * 1.4, 200, 200)
+        pass
+class Leftrun:
+
+    @staticmethod
+    def enter(b_: Boy):
+        print("Run enter")
+        b_.action = 0
+        b_.dx = 10
+        b_.dir = -1
+
+        pass
+
+    @staticmethod
+    def exit(b_: Boy):
+
+        pass
+
+    @staticmethod
+    def do(b_: Boy):
+
+
+
+        b_.frame = (b_.frame + 1) % 8
+        b_.x += b_.dx * b_.dir
+
+    @staticmethod
+    def draw(boy_: Boy):
+        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y * 1.4, 200, 200)
+        pass
+class Rightrun:
+
+    @staticmethod
+    def enter(b_: Boy):
+        print("Run enter")
+        b_.action = 1
+        b_.dx = 10
+        b_.dir = 1
+
+
+        pass
+
+    @staticmethod
+    def exit(b_: Boy):
+
+        pass
+
+    @staticmethod
+    def do(b_: Boy):
+
+        b_.frame = (b_.frame + 1) % 8
+        b_.x += b_.dx * b_.dir
+
+    @staticmethod
+    def draw(boy_: Boy):
+        boy_.image.clip_draw(boy_.frame * 100, boy_.action * 100 , 100, 100, boy_.x, boy_.y * 1.4, 200, 200)
         pass
 
 
@@ -132,8 +195,9 @@ class StateMachine:
             Sleep: {space_down : Idle},
 
 
-            Idle : {time_out : Sleep, a_down : Autorun},
-
+            Idle : {time_out : Sleep, a_down : Autorun, right_down : Rightrun, left_down : Leftrun},
+            Rightrun : {right_up : Idle},
+            Leftrun : {left_up : Idle},
             Autorun : {time_out : Idle}
         }
 
